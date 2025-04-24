@@ -2,23 +2,13 @@ from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.summarize import load_summarize_chain
 import streamlit as st
-import os
-from dotenv import load_dotenv
 from langchain_community.document_loaders import WebBaseLoader, YoutubeLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from langsmith import utils
 import validators
 
-load_dotenv(dotenv_path="../.env")
+enabled_tracing = True
 
-os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"] = "summarizer"
-os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGSMITH_API_KEY")
-os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
-
-enabled_tracing = utils.tracing_is_enabled()
-
-model = ChatGroq(model_name="Llama3-8b-8192")
+model = ChatGroq(model_name="Llama3-8b-8192", groq_api_key=st.secrets["GROQ_API_KEY"])
 map_prompt = ChatPromptTemplate.from_messages([
     ("system", "Make a concise summary of {text}")
 ])
