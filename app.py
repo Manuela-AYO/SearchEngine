@@ -5,10 +5,14 @@ import streamlit as st
 from langchain_community.document_loaders import WebBaseLoader, YoutubeLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import validators
+import os
 
 enabled_tracing = True
 
-model = ChatGroq(model_name="Llama3-8b-8192", groq_api_key=st.secrets["GROQ_API_KEY"])
+os.environ["USER_AGENT"]="ManuelaGenAI/1.0"
+os.environ.pop("SSL_CERT_FILE", None)
+
+model = ChatGroq(model_name="Llama3-8b-8192", api_key=st.secrets["GROQ_API_KEY"])
 map_prompt = ChatPromptTemplate.from_messages([
     ("system", "Make a concise summary of {text}")
 ])
